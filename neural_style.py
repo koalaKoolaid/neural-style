@@ -10,7 +10,8 @@ from PIL import Image
 import numpy as np
 import scipy.misc
 
-from stylize import stylize
+import stylize
+#from stylize import stylize #works in 2.x, not 3.x
 
 
 # default arguments
@@ -138,15 +139,14 @@ def fmt_imsave(fmt, iteration):
         raise ValueError("illegal format string '{}'".format(fmt))
 
 
-def main():
-
+def generate(content_file, style_file, output_file):
     # https://stackoverflow.com/a/42121886
     key = 'TF_CPP_MIN_LOG_LEVEL'
     if key not in os.environ:
         os.environ[key] = '2'
 
     parser = build_parser()
-    options = parser.parse_args()
+    options = parser.parse_args(["--content",content_file,"--styles", style_file,"--output",output_file])
 
     if not os.path.isfile(options.network):
         parser.error("Network %s does not exist. (Did you forget to "
@@ -285,5 +285,6 @@ def imsave(path, img):
     img = np.clip(img, 0, 255).astype(np.uint8)
     Image.fromarray(img).save(path, quality=95)
 
-if __name__ == '__main__':
-    main()
+#don't need - called from other python script
+# if __name__ == '__main__':
+#     main()
